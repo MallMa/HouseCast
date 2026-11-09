@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; media-src 'self' blob:; worker-src 'self'; object-src 'none'; base-uri 'none'; frame-src 'none'"
+    />
+    <title>Housecast</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-bar">
+      <a class="brand" href="#" aria-label="Housecast home"
+        ><span class="brand-mark" aria-hidden="true"
+          ><i></i><i></i><i></i><i></i></span
+        ><span>House<b>cast</b></span></a
+      >
+      <nav class="navigation" aria-label="Main navigation">
+        <button class="nav-item active" data-view="listen" aria-current="page">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 10v4m5-8v12m6-15v18m5-12v6" /></svg
+          >Playback
+        </button>
+        <button class="nav-item" data-view="connection">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 7h16M4 17h16" />
+            <circle cx="9" cy="7" r="3" />
+            <circle cx="16" cy="17" r="3" /></svg
+          >Settings
+        </button>
+      </nav>
+      <div class="app-local"><span class="dot"></span>Local connection</div>
+    </header>
+    <main>
+      <header class="page-header">
+        <div>
+          <div class="eyebrow">YOUR HOME, CONNECTED</div>
+          <h1 id="page-title">Your listening space</h1>
+          <p id="page-subtitle">Choose your rooms. Bring your sound along.</p>
+        </div>
+        <button id="refresh" class="button secondary">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 12-1l2 3M4 15l2 3a7 7 0 0 0 12-1"
+            /></svg
+          >Refresh
+        </button>
+      </header>
+      <section id="listen-view">
+        <div class="workspace">
+          <section class="rooms-panel" aria-labelledby="rooms-heading">
+            <div class="section-heading">
+              <div>
+                <h2 id="rooms-heading">
+                  Rooms <span id="room-count" class="count">0</span>
+                </h2>
+                <p id="network-summary" class="small">
+                  Finding your home network…
+                </p>
+              </div>
+              <button id="select-all" class="text-button">Select all</button>
+            </div>
+            <div id="rooms" class="room-grid"></div>
+            <div id="empty-state" class="empty-state">
+              <span class="empty-icon">⌕</span>
+              <h3>Finding your speakers</h3>
+              <p>Looking for speakers on your local network.</p>
+              <button id="empty-connection" class="button secondary">
+                Open settings
+              </button>
+            </div>
+            <div class="room-actions">
+              <span id="selection-summary">No rooms selected</span>
+              <div>
+                <button id="group" class="text-button">Group selected</button
+                ><button id="ungroup" class="text-button">
+                  Separate rooms
+                </button>
+              </div>
+            </div>
+            <div class="connection-card">
+              <div class="connection-icon">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M3 8a15 15 0 0 1 18 0M6 12a10 10 0 0 1 12 0M9 16a5 5 0 0 1 6 0"
+                  />
+                  <circle cx="12" cy="20" r="1" />
+                </svg>
+              </div>
+              <div>
+                <strong id="connection-status"
+                  >Connecting to your system</strong
+                >
+                <p id="latency-summary">Waiting for a speaker reply</p>
+              </div>
+              <span id="connection-dot" class="dot dim"></span>
+            </div>
+          </section>
+          <aside class="sources" aria-label="Audio sources">
+            <section class="source-panel">
+              <div class="source-top">
+                <span class="source-kicker">FROM YOUR COMPUTER</span
+                ><span id="stream-badge" class="badge">READY</span>
+              </div>
+              <div class="desktop-visual" aria-hidden="true">
+                <div class="desktop-glyph">
+                  <svg viewBox="0 0 64 50">
+                    <rect x="5" y="4" width="54" height="34" rx="4" />
+                    <path d="M23 46h18M32 38v8M17 21h5l4-8 8 17 5-10h8" />
+                  </svg>
+                </div>
+                <div class="visual-line"></div>
+                <div id="level-meter" class="level-meter">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+                  ><i></i><i></i><i></i>
+                </div>
+              </div>
+              <h2>Desktop audio</h2>
+              <p class="source-intro">
+                What’s playing on your PC,<br />wherever you want to hear it.
+              </p>
+              <label class="format-field"
+                ><span>Audio quality</span
+                ><select id="format">
+                  <option value="flac24">
+                    Lossless · 24-bit / 48 kHz FLAC
+                  </option>
+                  <option value="pcm16">
+                    Compatibility · 16-bit / 48 kHz PCM
+                  </option>
+                </select></label
+              >
+              <label class="switch-label"
+                ><span>Mute PC playback</span
+                ><input type="checkbox" id="local-mute" /><span
+                  class="switch"
+                  aria-hidden="true"
+                ></span
+              ></label>
+              <button id="stream" class="button primary">
+                <span id="stream-icon" aria-hidden="true">▶</span
+                ><span id="stream-text">Stream desktop</span>
+              </button>
+              <div class="stream-note">
+                <span id="stream-detail"
+                  >Stereo audio · on your local network</span
+                ><span id="stream-time"></span>
+              </div>
+              <p
+                id="stream-health"
+                class="stream-health"
+                role="status"
+                hidden
+              ></p>
+              <button id="reconnect-audio" class="button secondary" hidden>
+                Reconnect audio
+              </button>
+            </section>
+            <section class="bluetooth-source">
+              <div class="bluetooth-heading">
+                <span class="bluetooth-symbol"
+                  ><svg viewBox="0 0 24 24">
+                    <path d="m7 7 10 10-5 5V2l5 5L7 17" /></svg
+                ></span>
+                <div>
+                  <h3>Bluetooth sharing</h3>
+                  <p>One phone. Every room.</p>
+                </div>
+              </div>
+              <button id="bluetooth" class="button secondary">
+                Share to all rooms <span aria-hidden="true">↗</span>
+              </button>
+            </section>
+          </aside>
+        </div>
+        <p class="latency-note">
+          <span aria-hidden="true">ⓘ</span> Control response and audio delay are
+          different. Speakers buffer desktop audio; video and games may be out
+          of sync.
+        </p>
+      </section>
+      <section id="connection-view" hidden>
+        <div class="system-summary">
+          <div>
+            <span class="summary-label">SPEAKERS ONLINE</span
+            ><strong id="device-total">—</strong>
+          </div>
+          <div>
+            <span class="summary-label">LISTENING ROOMS</span
+            ><strong id="system-rooms">—</strong>
+          </div>
+          <div>
+            <span class="summary-label">THIS COMPUTER</span
+            ><strong id="system-address" class="mono">—</strong>
+          </div>
+        </div>
+        <section
+          class="settings-panel discovery-panel"
+          aria-labelledby="discovery-heading"
+        >
+          <div class="discovery-copy">
+            <div class="section-heading">
+              <h2 id="discovery-heading">Find your speakers</h2>
+              <span id="search-status" class="status-label"
+                >Ready to search</span
+              >
+            </div>
+            <p>Discover speakers on your selected home network.</p>
+            <div class="search-progress">
+              <progress
+                id="search-progress"
+                max="100"
+                value="0"
+                aria-label="Speaker search progress"
+              ></progress
+              ><span id="search-detail"
+                >Saved speakers reconnect automatically.</span
+              >
+            </div>
+          </div>
+          <div class="discovery-actions">
+            <button id="search-speakers" class="button blue">
+              <svg viewBox="0 0 24 24">
+                <circle cx="10" cy="10" r="6" />
+                <path d="m15 15 5 5" /></svg
+              ><span>Search now</span></button
+            ><label class="switch-label light-switch"
+              ><span>Automatic discovery</span
+              ><input id="auto-discovery" type="checkbox" checked /><span
+                class="switch"
+                aria-hidden="true"
+              ></span></label
+            ><small>Search for new speakers every 30 seconds</small>
+          </div>
+        </section>
+        <section
+          class="settings-panel inventory-panel"
+          aria-labelledby="inventory-heading"
+        >
+          <div class="section-heading">
+            <div>
+              <h2 id="inventory-heading">
+                Speaker inventory
+                <span id="inventory-count" class="count">0</span>
+              </h2>
+              <p class="small">Every speaker, including surrounds and Sub.</p>
+            </div>
+            <span class="inventory-live"
+              ><span class="dot"></span>Live status</span
+            >
+          </div>
+          <div class="table-scroll">
+            <table class="device-table">
+              <thead>
+                <tr>
+                  <th scope="col">Speaker</th>
+                  <th scope="col">Room / role</th>
+                  <th scope="col">IP address</th>
+                  <th scope="col">Last reply</th>
+                  <th scope="col">Firmware</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody id="device-list"></tbody>
+            </table>
+          </div>
+          <div id="inventory-empty" class="inventory-empty">
+            No speakers saved yet. Use Search now to find your system.
+          </div>
+          <p class="table-note">
+            Reply times measure network requests, not audio delay. Hover over a
+            status for its last successful check. Bonded speakers stay with
+            their room.
+          </p>
+        </section>
+        <div class="settings-grid">
+          <section class="settings-panel">
+            <div class="panel-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="13" rx="2" />
+                <path d="M8 21h8m-4-5v5" />
+              </svg>
+            </div>
+            <h2>Network</h2>
+            <p>Ethernet or Wi-Fi on the same network as your speakers.</p>
+            <label class="field"
+              >Network interface<select id="network"></select
+            ></label>
+            <p id="network-detail" class="network-detail"></p>
+            <details class="advanced-settings">
+              <summary>Add a speaker by address</summary>
+              <div class="manual-address">
+                <label class="field"
+                  >Speaker IPv4 address<input
+                    id="manual-ip"
+                    placeholder="192.168.1.50"
+                    inputmode="decimal"
+                    maxlength="15" /></label
+                ><button id="add-address" class="button secondary">
+                  Find speaker
+                </button>
+              </div>
+            </details>
+          </section>
+          <section class="settings-panel">
+            <div class="panel-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z" />
+                <path d="m8 12 3 3 5-6" />
+              </svg>
+            </div>
+            <h2>Speaker access</h2>
+            <p>
+              Speakers need to connect back to this PC to receive desktop audio.
+            </p>
+            <div class="access-detail">
+              <span class="dot"></span
+              ><span id="callback-status">Checking speaker events…</span>
+            </div>
+            <button id="firewall" class="button secondary">
+              Allow speaker connections
+            </button>
+            <p class="small permission-note">
+              Adds a rule for this app and home subnet. Windows will request
+              administrator approval.
+            </p>
+          </section>
+        </div>
+        <section class="settings-panel activity-panel">
+          <div class="section-heading">
+            <div>
+              <h2>Recent activity</h2>
+              <p class="small">
+                Connection checks and room changes. Audio is never saved.
+              </p>
+            </div>
+            <button id="export" class="text-button">Export report ↗</button>
+          </div>
+          <ol id="activity" class="activity"></ol>
+        </section>
+      </section>
+      <footer class="app-footer">
+        <span>HOUSECAST <span id="app-version"></span></span
+        ><span>Independent. Local. Yours.</span>
+      </footer>
+    </main>
+    <div id="notice" role="status" aria-live="polite" hidden>
+      <span></span><button aria-label="Dismiss notification">×</button>
+    </div>
+    <template id="room-template"
+      ><article class="room-card">
+        <div class="room-top">
+          <div class="room-symbol" aria-hidden="true">
+            <svg class="bar-symbol" viewBox="0 0 48 32">
+              <rect x="2" y="11" width="44" height="11" rx="5" />
+              <path d="M9 15v3m5-3v3m5-3v3m5-3v3m5-3v3m5-3v3m5-3v3" /></svg
+            ><svg class="box-symbol" viewBox="0 0 48 32">
+              <rect x="10" y="2" width="28" height="28" rx="6" />
+              <path d="M15 10h18m-18 4h18m-18 4h18m-18 4h18" />
+            </svg>
+          </div>
+          <button class="room-select" aria-pressed="false">
+            <span
+              ><span class="room-name"></span
+              ><span class="room-model"></span></span
+            ><span class="check-circle" aria-hidden="true">✓</span>
+          </button>
+        </div>
+        <div class="room-source">
+          <div>
+            <span class="room-source-name"></span
+            ><span class="room-state"></span>
+          </div>
+          <button class="room-play icon-button" aria-label="Resume playback">
+            ▶
+          </button>
+        </div>
+        <div class="room-volume">
+          <button class="room-mute icon-button" aria-label="Mute room">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M4 9h4l5-4v14l-5-4H4ZM17 8a6 6 0 0 1 0 8M20 5a10 10 0 0 1 0 14"
+              />
+            </svg></button
+          ><input
+            class="volume-slider"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            aria-label="Volume"
+          /><output class="volume-value">0</output>
+        </div>
+        <div class="room-foot">
+          <span class="room-online"><i class="dot"></i><span></span></span
+          ><span class="room-bonded"></span><span class="room-group"></span>
+        </div></article
+    ></template>
+    <script type="module" src="renderer.js"></script>
+  </body>
+</html>

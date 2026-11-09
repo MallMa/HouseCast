@@ -1,0 +1,20 @@
+# Dependencies and build output
+node_modules/
+dist/
+release/
+
+# Local test runs and app data. Diagnostic captures can contain device IDs,
+# room names and LAN addresses: never commit them.
+diagnostics/
+test-output/
+.app-test-data/
+*.log
+
+# Personal notes, measurements and hardware-specific scripts
+.private/
+
+# Editor/OS noise
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
