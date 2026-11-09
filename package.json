@@ -11,7 +11,7 @@
     "test": "node --test test/*.test.mjs",
     "test:ui": "node scripts/ui-smoke.mjs",
     "pack": "electron-builder --win dir --x64",
-    "dist": "electron-builder --win portable --x64",
+    "dist": "electron-builder --win nsis portable --x64",
     "format": "prettier --write app test scripts/*.mjs package.json",
     "prepack": "node node_modules/electron/install.js",
     "predist": "node node_modules/electron/install.js"
@@ -40,6 +40,7 @@
     ],
     "win": {
       "target": [
+        "nsis",
         "portable"
       ],
       "icon": "app/assets/icon.ico",
@@ -55,7 +56,15 @@
         "to": "allow-home-network.ps1"
       }
     ],
-    "electronDist": "node_modules/electron/dist"
+    "electronDist": "node_modules/electron/dist",
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "artifactName": "Housecast-${version}-Windows-Setup.exe",
+      "shortcutName": "Housecast",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   },
   "author": "Housecast contributors",
   "license": "MIT",

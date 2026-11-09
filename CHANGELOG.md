@@ -13,6 +13,8 @@
 - The footer shows the real application version.
 - Quit handlers are registered before the window loads, so closing the app
   during a failed load still stops capture and restores sources.
+- New per-user Windows installer (`Housecast-<version>-Windows-Setup.exe`)
+  next to the portable exe.
 - Added MIT license, contributor guide, security policy, CI and a generic
   read-only UI smoke test.
 

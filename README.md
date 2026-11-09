@@ -23,8 +23,10 @@ Housecast works with **Sonos®** speakers using their local network interface. I
 
 ## Install
 
-1. Download `Housecast-<version>-Windows-portable.exe` from the [Releases](../../releases) page.
-2. Run it. It is a portable app; no installation is needed.
+Download from the [Releases](../../releases) page:
+
+- **`Housecast-<version>-Windows-Setup.exe`** (recommended) installs for your user account only, without administrator rights. It adds Start menu and desktop shortcuts and an entry in **Settings → Apps** for uninstalling.
+- **`Housecast-<version>-Windows-portable.exe`** runs without installing.
 
 The executable is not code-signed, so Windows SmartScreen may show **"Windows protected your PC"**. Choose **More info → Run anyway**, or build it yourself from source (below).
 
@@ -77,7 +79,7 @@ Requires Node.js 22.12 or newer on Windows.
 npm ci
 npm start          # run in development
 npm test           # unit tests, no speakers needed
-npm run dist       # build release/Housecast-<version>-Windows-portable.exe
+npm run dist       # build the installer and portable exe in release/
 ```
 
 ### Project layout
