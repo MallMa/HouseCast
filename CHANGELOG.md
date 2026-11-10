@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- **Android preview** (`android/`): native Kotlin app that streams phone audio
+  (FLAC or PCM), with room control, grouping, Bluetooth sharing, discovery and
+  a capture check that shows which apps allow their audio to be captured.
+  Preview APKs are built by GitHub Actions.
+
 ## 0.3.0 — first public release
 
 - Renamed the project to **Housecast**. App data now lives in

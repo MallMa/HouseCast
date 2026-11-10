@@ -16,6 +16,10 @@ Housecast works with **Sonos®** speakers using their local network interface. I
 - **Automatic discovery.** Finds speakers via multicast discovery, remembers them, and can scan your subnet when multicast is blocked. You can also add a speaker by IP address.
 - **Private by design.** Everything stays on your LAN. No audio is ever saved. Diagnostic logs contain only counters and connection events.
 
+## Android (preview)
+
+An Android version is in development: it streams your phone's audio and offers the same room controls. See [android/README.md](android/README.md) for the preview APK and its limitations.
+
 ## Requirements
 
 - Windows 10 or 11 (desktop audio capture uses Windows loopback; macOS and Linux are not supported yet)

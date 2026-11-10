@@ -1,0 +1,9 @@
+<resources>
+    <color name="brand_background">#12170F</color>
+    <color name="brand_surface">#1A2114</color>
+    <style name="Theme.Housecast" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/brand_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>
