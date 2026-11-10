@@ -184,10 +184,12 @@ private fun RoomCard(
                 // Hold the dragged value until the speaker confirms it, so the
                 // thumb does not jump back to the old volume in between.
                 var drag by remember(room.id) { mutableStateOf<Float?>(null) }
-                var settled by remember(room.id) { mutableStateOf(0) }
-                LaunchedEffect(room.volume, settled) {
-                    if (settled > 0) delay(1500)
+                var released by remember(room.id) { mutableStateOf(false) }
+                LaunchedEffect(room.volume, released) {
+                    if (!released) return@LaunchedEffect
+                    if (drag?.roundToInt() != room.volume) delay(1500)
                     drag = null
+                    released = false
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = onMute) {
@@ -198,10 +200,13 @@ private fun RoomCard(
                     }
                     Slider(
                         value = drag ?: room.volume.toFloat(),
-                        onValueChange = { drag = it },
+                        onValueChange = {
+                            drag = it
+                            released = false
+                        },
                         onValueChangeFinished = {
                             drag?.let { onVolume(it.roundToInt()) }
-                            settled++
+                            released = true
                         },
                         valueRange = 0f..100f,
                         modifier = Modifier.weight(1f),
